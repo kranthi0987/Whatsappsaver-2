@@ -1,4 +1,4 @@
-package com.sanjay.whatsappsaver;
+package com.sanjay.whatsappsaver.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

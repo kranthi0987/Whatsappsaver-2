@@ -8,23 +8,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.snatik.storage.Storage;
 
 import java.io.File;
@@ -33,26 +33,35 @@ import static com.sanjay.whatsappsaver.util.util.sendFeedback;
 
 public class Video_activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public InterstitialAd interstitial;
     String toPath = Environment.getExternalStorageDirectory() + "/whatsapp status saver/";
     private FloatingActionMenu menuRed;
     private com.github.clans.fab.FloatingActionButton fab1;
     private com.github.clans.fab.FloatingActionButton fab2;
     private com.github.clans.fab.FloatingActionButton fab3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        interstitial.loadAd(adRequest);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         final Storage storage = new Storage(getApplicationContext());
         Log.d("", "yessss");
@@ -88,7 +97,20 @@ public class Video_activity extends AppCompatActivity
                         });
                 snackbar.show();
                 scanFile(topath1);
-                Log.d("scan", "onClick: " + topath1);
+//                displayInterstitial();
+//                interstitial.setAdListener(new AdListener() {
+//                    @Override
+//                    public void onAdLoaded() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAdClosed() {
+//                        // Proceed to the next activity.
+//                        onBackPressed();
+//                    }
+//                });
+//                Log.d("scan", "onClick: " + topath1);
                 // sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse(f)));
             }
         });
@@ -131,8 +153,16 @@ public class Video_activity extends AppCompatActivity
 //                sharingIntent.putExtra(Intent.EXTRA_TEXT, "Hey this is the video text");
                 sharingIntent.putExtra(Intent.EXTRA_STREAM,uri);
                 startActivity(Intent.createChooser(sharingIntent,"Share Video"));
+
             }
         });
+
+    }
+
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
     }
 
     private void scanFile(String path) {

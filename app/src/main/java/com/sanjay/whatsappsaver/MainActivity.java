@@ -14,20 +14,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -36,17 +34,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sanjay.whatsappsaver.app.Config;
 import com.sanjay.whatsappsaver.util.NotificationUtils;
 
-import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.sanjay.whatsappsaver.util.util.getMimeType;
 import static com.sanjay.whatsappsaver.util.util.sendFeedback;
@@ -132,6 +130,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         // feedback preference click listener
+
     }
 
     ArrayList<File> imageReader(File dir) {
@@ -281,13 +280,13 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            Log.d("", "getCount: " + list.size());
+//            Log.d("", "getCount: " + list.size());
             return list.size();
         }
 
         @Override
         public Object getItem(int position) {
-            Log.d("", "getItem: " + list.get(position));
+//            Log.d("", "getItem: " + list.get(position));
             return list.get(position);
         }
 
@@ -296,27 +295,46 @@ public class MainActivity extends AppCompatActivity
             return 0;
         }
 
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            holder holder;
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             convertView = inflater.inflate(R.layout.single_grid, parent, false);
             Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_play_arrow_white_24dp);
-            Log.d(TAG, "getView: " + getMimeType(list.get(position).toString()));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (Objects.equals(getMimeType(list.get(position).toString()), "image/jpeg")) {
-                    ImageView iv = convertView.findViewById(R.id.imageView3);
-                    Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(list.get(position).toString()), 100, 100);
-                    iv.setImageBitmap(ThumbImage);//Creation of Thumbnail of image
-                } else if (Objects.equals(getMimeType(list.get(position).toString()), "video/mp4")) {
-                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(list.get(position).toString(), MediaStore.Video.Thumbnails.MICRO_KIND);
-                    ImageView iv = convertView.findViewById(R.id.imageView3);
-    //                putOverlay(bMap,largeIcon);
-                    iv.setImageBitmap(putOverlay(bMap, largeIcon));
+//            Log.d(TAG, "getView: " + getMimeType(list.get(position).toString()));
+//            if ( convertView == null ) {
+//                convertView = inflater.inflate(R.layout.single_grid, null);
+//                holder=new holder();
+//                holder.img = (ImageView) convertView.findViewById(R.id.image);
+//                convertView.setTag(holder);
+//            }
+            if (convertView != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    if (Objects.equals(getMimeType(list.get(position).toString()), "image/jpeg")) {
+                        ImageView iv = convertView.findViewById(R.id.imageView3);
+                        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(list.get(position).toString()), 100, 100);
+                        iv.setImageBitmap(ThumbImage);//Creation of Thumbnail of image
+                    } else if (Objects.equals(getMimeType(list.get(position).toString()), "video/mp4")) {
+                        Bitmap bMap = ThumbnailUtils.createVideoThumbnail(list.get(position).toString(), MediaStore.Video.Thumbnails.MICRO_KIND);
+                        ImageView iv = convertView.findViewById(R.id.imageView3);
+                        //                putOverlay(bMap,largeIcon);
+                        iv.setImageBitmap(putOverlay(bMap, largeIcon));
+                    }
                 }
             }
+//            Glide
+//                    .with(this)
+//                    .load(list.get(position))
+//                    .into((ImageView) convertView );
+//            GlideApp
+//                    .with(context)
+//                    .load(imageUrls[position])
+//                    .into((ImageView) convertView);
             return convertView;
+        }
+
+        class holder {
+            ImageView img;
         }
 
 
