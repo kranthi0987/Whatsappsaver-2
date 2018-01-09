@@ -5,12 +5,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gun0912.tedpermission.PermissionListener;
@@ -25,15 +31,34 @@ import java.util.TimerTask;
 public class Splash_activity extends AppCompatActivity {
     public static final String mypreference = "mypref";
     public static final boolean isfirst = true;
+    public TextView txtView;
     PermissionListener permissionlistener;
     SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash_activity);
         Log.d("splash", "onCreate: ");
         FullScreencall();
         firsttime();
+        TextView txtView = findViewById(R.id.textView);
+        Typeface roboto = Typeface.createFromAsset(this.getAssets(),
+                "font/Roboto-Bold.ttf"); //use this.getAssets if you are calling from an Activity
+        txtView.setTypeface(roboto);
+        txtView.setTextColor(Color.WHITE);
+
+        ConstraintLayout layout = findViewById(R.id.splash);
+        final int sdk = android.os.Build.VERSION.SDK_INT;
+        if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.whatsappcopy));
+        } else {
+            layout.setBackground(getResources().getDrawable(R.drawable.whatsappcopy));
+        }
+
     }
     public void firsttime() {
         Timer t = new Timer();

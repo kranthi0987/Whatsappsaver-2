@@ -102,4 +102,5 @@
     <string name="title_activity_video_activity">Video_activity</string>
     <string name="title_activity_about">about</string>
     <string name="title_activity_viewimage">Viewimage</string>
+    <string name="status_downloader">Status Downloader</string>
 </resources>
