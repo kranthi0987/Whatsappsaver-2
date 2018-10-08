@@ -19,11 +19,13 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.sanjay.whatsappsaver.util.ApplicationUtility;
 import com.snatik.storage.Storage;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,6 +40,7 @@ public class Splash_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -54,9 +57,9 @@ public class Splash_activity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.splash);
         final int sdk = android.os.Build.VERSION.SDK_INT;
         if (sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.whatsappcopy));
+            layout.setBackgroundDrawable(getResources().getDrawable(R.drawable.background));
         } else {
-            layout.setBackground(getResources().getDrawable(R.drawable.whatsappcopy));
+            layout.setBackground(getResources().getDrawable(R.drawable.background));
         }
 
     }
